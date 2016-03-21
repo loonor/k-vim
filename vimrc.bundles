@@ -16,8 +16,8 @@ filetype off " required! turn off
 
 " inspired by spf13, 自定义需要的插件集合
 if !exists('g:bundle_groups')
-    " let g:bundle_groups=['python', 'javascript', 'markdown', 'html', 'css', 'tmux', 'beta', 'json', 'nginx', 'golang', 'ruby', 'less', 'php', 'coffeescript']
-    let g:bundle_groups=['python', 'javascript', 'markdown', 'html', 'css', 'tmux', 'beta']
+    let g:bundle_groups=['python', 'javascript', 'markdown', 'html', 'css', 'tmux', 'beta', 'json', 'nginx', 'golang', 'ruby', 'less', 'php', 'coffeescript', 'rust', 'elixir', 'haskell', 'orgmode']
+   "" let g:bundle_groups=['python', 'javascript', 'markdown', 'html', 'css', 'tmux', 'beta']
 endif
 
 " ----------------------------------------------------------------------------
@@ -41,7 +41,7 @@ Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 " 代码自动补全
 " 迄今为止用到的最好的自动VIM自动补全插件
 " 重启 :YcmRestartServer
-Plug 'Valloric/YouCompleteMe'
+Plug 'Valloric/YouCompleteMe', {'do': './install.py --clang-completer --gocode-completer  --tern-completer --system-libclang'}
 " 自动补全单引号，双引号等
 Plug 'Raimondi/delimitMate'
 " 自动补全html/xml标签
@@ -154,7 +154,8 @@ Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-entire'
 " 增加缩进文本对象: i   dai yai cii - 相同缩进属于同一块
 Plug 'kana/vim-textobj-indent'
-
+" 
+Plug 'Shougo/vimproc.vim', {'do': 'make'}
 if count(g:bundle_groups, 'tmux')
     " tmux
     " For tmux navigator Ctrl-hjkl
@@ -176,6 +177,8 @@ if count(g:bundle_groups, 'golang')
     " 2. :GoInstallBinaries
     " vimgo
     Plug 'fatih/vim-go', {'for': 'go'}
+    Plug 'garyburd/go-explorer', {'for': 'go'}
+    set rtp+=$GOPATH/src/github.com/nsf/gocode/vim
 endif
 
 
@@ -267,6 +270,50 @@ endif
 
 
 " Add plugins to &runtimepath
+if count(g:bundle_groups, 'rust')
+    "for rust language
+    Plug 'racer-rust/vim-racer', {'for': 'rust'}
+    Plug 'rust-lang/rust.vim', {'for': 'rust'}
+    Plug 'rhysd/rust-doc.vim', {'for': 'rust'}
+    Plug 'cespare/vim-toml', {'for': 'toml'}
+    let g:racer_cmd=$RACER_CMD
+    let RUST_SRC_PATH=$RUST_SRC_PATH
+    let g:rust_doc#downloaded_rust_doc_dir="$MULTIRUST/toolchains/nightly"
+endif
+
+if count(g:bundle_groups, 'elixir')
+    "for elixir erlang
+    Plug 'mattreduce/vim-mix'
+    Plug 'elixir-lang/vim-elixir', {'for': 'elixir'}
+    Plug 'carlosgaldino/elixir-snippets',{'for': 'elixir'}
+    au BufNewFile,BufRead *.exs set ft=elixir
+    Plug 'sanmiguel/helpex.vim'
+    Plug 'vim-erlang/vim-erlang-runtime'
+    Plug 'vim-erlang/vim-erlang-tags' , {'for': 'erlang'}
+    Plug 'vim-erlang/vim-erlang-compiler'
+    Plug 'vim-erlang/vim-erlang-omnicomplete' ,{'for': 'erlang'}
+endif
+if count(g:bundle_groups, 'haskell')
+    "for haskell 
+    Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
+    Plug 'enomsg/vim-haskellConcealPlus', { 'for': 'haskell' }
+    Plug 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
+    Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
+    Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
+    Plug 'mpickering/hlint-refactor-vim', { 'for': 'haskell' }
+    let g:ghcmod_ghc_options = ['-idir1', '-idir2']
+    let g:ghcmod_open_quickfix_function = 'GhcModQuickFix'
+    
+    let g:haskell_enable_quantification = 1 ""to enable highlighting of forall
+    let g:haskell_enable_recursivedo = 1 ""to enable highlighting of mdo and rec
+    let g:haskell_enable_arrowsyntax = 1 ""to enable highlighting of proc
+    let g:haskell_enable_pattern_synonyms = 1 ""to enable highlighting of pattern
+    let g:haskell_enable_typeroles = 1 ""to enable highlighting of type roles
+    let g:haskell_enable_static_pointers = 1 ""to enable highlighting of static
+endif
+if count(g:bundle_groups, 'orgmode')
+    Plug 'jceb/vim-orgmode'
+endif
 call plug#end()
 
 
